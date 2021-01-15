@@ -1,5 +1,6 @@
 package server.database;
 
+import server.database.command.Command;
 import server.database.command.CommandFactory;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -36,4 +37,5 @@ public class JSONDatabase {
     public CommandFactory commandFactory () {
         return new CommandFactory(this);
     }
+
 }
