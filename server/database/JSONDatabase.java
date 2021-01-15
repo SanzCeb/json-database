@@ -1,41 +1,47 @@
 package server.database;
 
-import server.database.command.Command;
 import server.database.command.CommandFactory;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class JSONDatabase {
+    private String result = "ERROR";
     private final String [] cells = Stream.generate(() -> "")
-            .limit(100)
+            .limit(1000)
             .toArray(String[]::new);
 
-    public boolean set (int index, String cell) {
-        boolean result;
+    public void set (int index, String cell) {
 
         if (index < 1 || index > 100) {
-            result = false;
+            setCommandResult("ERROR");
         } else {
             cells[index - 1] = cell;
-            result = true;
+            setCommandResult("OK");
         }
-
-        return result;
     }
 
-    public Optional<String> get (int index) {
-        return Optional.of(index)
+    public void get (int index) {
+        Optional.of(index)
                 .filter(i -> i > 0 && i < 101)
                 .map(i -> cells[i - 1])
-                .filter(cell -> !cell.isEmpty());
+                .filter(cell -> !cell.isEmpty())
+                .ifPresentOrElse(this::setCommandResult, () -> setCommandResult("ERROR"));
     }
 
-    public boolean delete (int index) {
-        return set(index, "");
+    public void delete (int index) {
+        set(index, "");
     }
 
     public CommandFactory commandFactory () {
         return new CommandFactory(this);
     }
 
+    private void setCommandResult(String result) {
+        this.result = result;
+    }
+
+    public String getCommandResult() {
+        return result;
+    }
 }
