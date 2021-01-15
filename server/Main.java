@@ -1,12 +1,11 @@
 package server;
 
-import com.beust.jcommander.JCommander;
+import com.google.gson.GsonBuilder;
 import server.database.JSONDatabase;
+import server.database.JSONDatabaseArgs;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
+import java.io.*;
+import java.net.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,6 +13,7 @@ public class Main {
         int port = 23456;
         var jsonDatabase = new JSONDatabase();
         var commandFactory = jsonDatabase.commandFactory();
+        var gson = new GsonBuilder().create();
         System.out.println("Server started!");
         try (var serverSocket = new ServerSocket(port, 50, InetAddress.getByName(address))) {
             while (true) {
@@ -23,13 +23,13 @@ public class Main {
                         var output = new DataOutputStream(socket.getOutputStream())
                 ) {
                     var receivedInput = input.readUTF();
-                    commandFactory.parseCommand(receivedInput).execute();
-                    var outputMsg = jsonDatabase.getCommandResult();
+                    var commandArgs = gson.fromJson(receivedInput, JSONDatabaseArgs.class);
+                    commandFactory.parseCommand(commandArgs).execute();
+                    var outputMsg = gson.toJson(jsonDatabase.getCommandResult());
                     output.writeUTF(outputMsg);
-                }
+                } catch (Exception ignored){ break;}
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 }
 

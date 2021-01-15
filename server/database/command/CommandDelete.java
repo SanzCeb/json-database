@@ -3,16 +3,16 @@ package server.database.command;
 import server.database.JSONDatabase;
 
 public class CommandDelete extends JSONCommand {
-    private final int index;
+    private final String key;
 
-    CommandDelete(JSONDatabase database, int index) {
+    CommandDelete(JSONDatabase database, String key) {
         super(database);
-        this.index = index;
+        this.key = key;
     }
 
     @Override
     public void execute() {
-        jsonDatabase.delete(index);
+        jsonDatabase.delete(key);
     }
 
 }

@@ -3,17 +3,17 @@ package server.database.command;
 import server.database.JSONDatabase;
 
 public class CommandSet extends JSONCommand {
-    private final int index;
+    private final String key;
     private final String data;
 
-    CommandSet(JSONDatabase database, int index, String data) {
+    CommandSet(JSONDatabase database, String key, String data) {
         super(database);
-        this.index = index;
+        this.key = key;
         this.data = data;
     }
 
     @Override
     public void execute() {
-        jsonDatabase.set(index, data);
+        jsonDatabase.set(key, data);
     }
 }

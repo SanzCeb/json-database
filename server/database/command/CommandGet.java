@@ -3,15 +3,15 @@ package server.database.command;
 import server.database.JSONDatabase;
 
 public class CommandGet extends JSONCommand {
-    private final int index;
+    private final String key;
 
-    CommandGet(JSONDatabase database, int index) {
+    CommandGet(JSONDatabase database, String index) {
         super(database);
-        this.index = index;
+        this.key = index;
     }
 
     @Override
     public void execute() {
-        jsonDatabase.get(index);
+        jsonDatabase.get(key);
     }
 }

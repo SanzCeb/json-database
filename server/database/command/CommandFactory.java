@@ -1,34 +1,33 @@
 package server.database.command;
 
 import server.database.JSONDatabase;
-
-import java.util.Scanner;
+import server.database.JSONDatabaseArgs;
 
 public class CommandFactory {
     private final JSONDatabase jsonDatabase;
+
     public CommandFactory(JSONDatabase jsonDatabase) {
         this.jsonDatabase = jsonDatabase;
     }
 
-    public Command parseCommand(String command) {
-        var scanner = new Scanner(command);
+    public Command parseCommand(JSONDatabaseArgs commandArgs) {
         Command result;
         try {
-            var commandName = scanner.next("\\w+");
-            int index;
+            var commandName = commandArgs.getType();
+            String key;
             switch (commandName.toLowerCase()) {
                 case "get":
-                    index = Integer.parseInt(scanner.nextLine().trim());
-                    result = new CommandGet(jsonDatabase, index);
+                    key = commandArgs.getKey();
+                    result = new CommandGet(jsonDatabase, key);
                     break;
                 case "set":
-                    index = Integer.parseInt(scanner.next("\\d+"));
-                    var value = scanner.nextLine().trim();
-                    result = new CommandSet(jsonDatabase, index, value);
+                    key = commandArgs.getKey();
+                    var value = commandArgs.getValue();
+                    result = new CommandSet(jsonDatabase, key, value);
                     break;
                 case "delete":
-                    index = Integer.parseInt(scanner.nextLine().trim());
-                    result = new CommandDelete(jsonDatabase, index);
+                    key = commandArgs.getKey();
+                    result = new CommandDelete(jsonDatabase, key);
                     break;
                 case "exit":
                     result = new CommandExit();
