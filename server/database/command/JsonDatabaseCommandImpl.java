@@ -2,9 +2,9 @@ package server.database.command;
 
 import server.database.JSONDatabase;
 
-public abstract class JSONCommand implements Command {
+public abstract class JsonDatabaseCommandImpl implements JsonDatabaseCommand {
     protected final JSONDatabase jsonDatabase;
-    protected JSONCommand (JSONDatabase database) {
+    protected JsonDatabaseCommandImpl(JSONDatabase database) {
         this.jsonDatabase = database;
     }
 }

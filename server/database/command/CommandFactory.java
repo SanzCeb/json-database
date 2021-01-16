@@ -1,7 +1,7 @@
 package server.database.command;
 
 import server.database.JSONDatabase;
-import server.database.JSONDatabaseArgs;
+import server.database.args.JSONDatabaseArgs;
 
 public class CommandFactory {
     private final JSONDatabase jsonDatabase;
@@ -10,8 +10,8 @@ public class CommandFactory {
         this.jsonDatabase = jsonDatabase;
     }
 
-    public Command parseCommand(JSONDatabaseArgs commandArgs) {
-        Command result;
+    public JsonDatabaseCommand parseCommand(JSONDatabaseArgs commandArgs) {
+        JsonDatabaseCommand result;
         try {
             var commandName = commandArgs.getType();
             String key;

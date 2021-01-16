@@ -1,8 +1,9 @@
 package server.database.command;
 
 import server.database.JSONDatabase;
+import server.database.JsonDatabaseResponse;
 
-public class CommandSet extends JSONCommand {
+public class CommandSet extends JsonDatabaseCommandImpl {
     private final String key;
     private final String data;
 
@@ -13,7 +14,7 @@ public class CommandSet extends JSONCommand {
     }
 
     @Override
-    public void execute() {
-        jsonDatabase.set(key, data);
+    public JsonDatabaseResponse call() throws Exception {
+        return jsonDatabase.set(key, data);
     }
 }

@@ -1,8 +1,9 @@
 package server.database.command;
 
 import server.database.JSONDatabase;
+import server.database.JsonDatabaseResponse;
 
-public class CommandDelete extends JSONCommand {
+public class CommandDelete extends JsonDatabaseCommandImpl {
     private final String key;
 
     CommandDelete(JSONDatabase database, String key) {
@@ -11,8 +12,7 @@ public class CommandDelete extends JSONCommand {
     }
 
     @Override
-    public void execute() {
-        jsonDatabase.delete(key);
+    public JsonDatabaseResponse call() throws Exception {
+        return jsonDatabase.delete(key);
     }
-
 }

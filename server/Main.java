@@ -2,7 +2,7 @@ package server;
 
 import com.google.gson.GsonBuilder;
 import server.database.JSONDatabase;
-import server.database.JSONDatabaseArgs;
+import server.database.args.JSONDatabaseArgs;
 
 import java.io.*;
 import java.net.*;
@@ -13,8 +13,8 @@ public class Main {
         int port = 23456;
         var jsonDatabase = new JSONDatabase();
         var commandFactory = jsonDatabase.commandFactory();
-        var gson = new GsonBuilder().create();
         System.out.println("Server started!");
+        var executorService = createExecutorService();
         try (var serverSocket = new ServerSocket(port, 50, InetAddress.getByName(address))) {
             while (true) {
                 try (
@@ -23,13 +23,21 @@ public class Main {
                         var output = new DataOutputStream(socket.getOutputStream())
                 ) {
                     var receivedInput = input.readUTF();
-                    var commandArgs = gson.fromJson(receivedInput, JSONDatabaseArgs.class);
-                    commandFactory.parseCommand(commandArgs).execute();
-                    var outputMsg = gson.toJson(jsonDatabase.getCommandResult());
+                    var commandArgs = JSONDatabaseArgs.unmarshalling(receivedInput);
+                    var jsonDatabaseCommand = commandFactory.parseCommand(commandArgs);
+                    var jsonCommandResponse = CommandExecutor.runCommand(jsonDatabaseCommand);
+                    var outputMsg = jsonCommandResponse.marshalling();
                     output.writeUTF(outputMsg);
-                } catch (Exception ignored){ break;}
+                } catch (InterruptedException exception){
+                    executorService.stop();
+                    System.exit(0);
+                }
             }
         } catch (Exception ignored) {}
+    }
+
+    private static CommandExecutor createExecutorService() {
+        return new CommandExecutor();
     }
 }
 

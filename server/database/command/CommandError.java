@@ -1,8 +1,12 @@
 package server.database.command;
 
-public class CommandError implements Command {
+
+import server.database.JsonDatabaseResponse;
+
+public class CommandError implements JsonDatabaseCommand {
     @Override
-    public void execute() {
+    public JsonDatabaseResponse call() throws Exception {
         System.out.println("Invalid Command");
+        return null;
     }
 }

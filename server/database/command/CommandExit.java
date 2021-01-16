@@ -1,8 +1,11 @@
 package server.database.command;
 
-public class CommandExit implements Command {
+
+import server.database.JsonDatabaseResponse;
+
+public class CommandExit implements JsonDatabaseCommand {
     @Override
-    public void execute() {
-        System.exit(0);
+    public JsonDatabaseResponse call() throws Exception {
+        return null;
     }
 }
